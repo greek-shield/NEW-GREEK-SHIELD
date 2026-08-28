@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greek Shield Event Services — Request a Quote</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0e1a2b;
+    --navy-2:#152a44;
+    --steel:#1f3a5f;
+    --steel-2:#2c4d78;
+    --brass:#c9a227;
+    --brass-2:#e0bc4a;
+    --paper:#f1ede4;
+    --paper-2:#e7e1d2;
+    --ink:#10192a;
+    --ok:#3f7a52;
+    --err:#a4402a;
+    --radius:2px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Source Sans 3', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Oswald', sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.02em;
+    margin:0;
+  }
+  .mono{ font-family:'JetBrains Mono', monospace; letter-spacing:0.03em; }
+  a{color:inherit;}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 28px;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+  }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:var(--navy);
+    border-bottom:3px solid var(--brass);
+  }
+  nav .wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:72px;
+  }
+  .brand{ display:flex; align-items:center; gap:12px; color:var(--paper); }
+  .brand .shield-mark{ width:30px; height:34px; flex:none; }
+  .brand-text{ line-height:1.05; }
+  .brand-text .top{ font-size:19px; font-weight:600; color:var(--paper); }
+  .brand-text .bottom{ font-size:10.5px; color:var(--brass-2); letter-spacing:0.16em; }
+  .navlinks{ display:flex; gap:28px; align-items:center; }
+  .navlinks a{
+    color:var(--paper-2); text-decoration:none; font-size:14px;
+    letter-spacing:0.05em; text-transform:uppercase; font-weight:500;
+    border-bottom:2px solid transparent; padding-bottom:4px;
+  }
+  .navlinks a:hover{ border-color:var(--brass); color:var(--paper); }
+  .nav-cta{
+    background:var(--brass); color:var(--navy) !important; padding:9px 18px !important;
+    border-radius:var(--radius); border-bottom:none !important; font-weight:700 !important;
+  }
+  .nav-cta:hover{ background:var(--brass-2); }
+  @media (max-width:720px){ .navlinks a:not(.nav-cta){ display:none; } }
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    background:
+      radial-gradient(1200px 500px at 85% -10%, rgba(201,162,39,0.14), transparent 60%),
+      linear-gradient(180deg, var(--navy) 0%, #0a1220 100%);
+    color:var(--paper);
+    padding:88px 0 96px;
+    position:relative;
+    overflow:hidden;
+  }
+  header.hero::after{
+    content:"";
+    position:absolute; inset:0;
+    background-image: repeating-linear-gradient(115deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 44px);
+    pointer-events:none;
+  }
+  .hero-grid{
+    display:grid; grid-template-columns: 1.15fr 0.85fr; gap:56px; align-items:center;
+    position:relative; z-index:1;
+  }
+  @media (max-width:860px){ .hero-grid{ grid-template-columns:1fr; } }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    color:var(--brass-2); font-size:12.5px; font-weight:500;
+    letter-spacing:0.2em; text-transform:uppercase; margin-bottom:18px;
+  }
+  .eyebrow::before{ content:""; width:22px; height:2px; background:var(--brass-2); display:inline-block; }
+  .hero h1{
+    font-size:clamp(38px, 5.2vw, 62px);
+    line-height:1.02;
+    color:#fbf9f4;
+  }
+  .hero h1 span{ color:var(--brass-2); }
+  .hero p.lede{
+    font-size:18px; line-height:1.6; color:#c9d2de; max-width:46ch; margin-top:22px;
+  }
+  .hero-actions{ display:flex; gap:14px; margin-top:34px; flex-wrap:wrap; }
+  .btn{
+    font-family:'Oswald', sans-serif; text-transform:uppercase; letter-spacing:0.06em;
+    font-size:14.5px; font-weight:600; padding:15px 26px; border-radius:var(--radius);
+    border:2px solid transparent; cursor:pointer; text-decoration:none; display:inline-block;
+    transition:transform .12s ease, background .15s ease, border-color .15s ease;
+  }
+  .btn:active{ transform:translateY(1px); }
+  .btn-primary{ background:var(--brass); color:var(--navy); }
+  .btn-primary:hover{ background:var(--brass-2); }
+  .btn-ghost{ background:transparent; color:var(--paper); border-color:rgba(241,237,228,0.35); }
+  .btn-ghost:hover{ border-color:var(--paper); }
+
+  .hero-badge-served{
+    margin-top:30px; display:flex; align-items:center; gap:10px;
+    color:#93a2b6; font-size:13px;
+  }
+  .hero-badge-served .mono{ color:var(--brass-2); }
+
+  /* shield emblem */
+  .emblem-wrap{ display:flex; justify-content:center; }
+  .emblem{ width:min(280px, 80%); filter:drop-shadow(0 18px 40px rgba(0,0,0,0.45)); }
+
+  /* ---------- SERVICES ---------- */
+  section.services{ padding:84px 0 64px; }
+  .section-head{ max-width:640px; margin-bottom:44px; }
+  .section-head .eyebrow{ color:var(--steel-2); }
+  .section-head .eyebrow::before{ background:var(--steel-2); }
+  .section-head h2{ font-size:clamp(26px,3.4vw,36px); color:var(--navy); }
+  .section-head p{ color:#4a5568; font-size:16px; margin-top:12px; line-height:1.6; }
+
+  .svc-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  @media (max-width:860px){ .svc-grid{ grid-template-columns:1fr; } }
+  .svc-card{
+    background:#fff; border:1px solid #ddd5c2; border-radius:var(--radius);
+    padding:28px 24px; position:relative; overflow:hidden;
+  }
+  .svc-card::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:4px; background:var(--steel);
+  }
+  .svc-card.brass::before{ background:var(--brass); }
+  .svc-tag{ font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#8a8064; letter-spacing:0.08em; }
+  .svc-card h3{ font-size:22px; margin-top:10px; color:var(--navy); }
+  .svc-card p{ color:#586174; font-size:14.5px; line-height:1.6; margin-top:10px; }
+
+  .extras-strip{
+    margin-top:24px; padding:20px 24px; background:var(--paper-2); border:1px dashed #c7bd9f;
+    border-radius:var(--radius); display:flex; gap:14px; align-items:baseline; flex-wrap:wrap;
+  }
+  .extras-strip strong{ color:var(--navy); font-family:'Oswald',sans-serif; text-transform:uppercase; font-size:14px; letter-spacing:0.04em; }
+  .extras-strip span{ color:#5b6270; font-size:14.5px; }
+
+  /* ---------- HOW IT WORKS ---------- */
+  section.how{ background:var(--paper-2); padding:70px 0; border-top:1px solid #ddd5c2; border-bottom:1px solid #ddd5c2; }
+  .how-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:32px; }
+  @media (max-width:860px){ .how-grid{ grid-template-columns:1fr; } }
+  .how-step .num{ font-family:'Oswald',sans-serif; font-size:38px; color:var(--brass); font-weight:600; }
+  .how-step h3{ font-size:18px; color:var(--navy); margin-top:6px; }
+  .how-step p{ color:#5b6270; font-size:14.5px; line-height:1.6; margin-top:8px; }
+
+  /* ---------- FORM ---------- */
+  section.quote{ padding:88px 0 100px; }
+  .quote-shell{
+    background:var(--navy); border-radius:var(--radius); overflow:hidden;
+    display:grid; grid-template-columns: 0.85fr 1.15fr;
+  }
+  @media (max-width:860px){ .quote-shell{ grid-template-columns:1fr; } }
+  .quote-info{ padding:44px 38px; color:var(--paper); position:relative; }
+  .quote-info h2{ color:#fbf9f4; font-size:28px; }
+  .quote-info p{ color:#b9c2d0; font-size:15px; line-height:1.7; margin-top:14px; }
+  .quote-info ul{ margin-top:24px; padding:0; list-style:none; }
+  .quote-info li{ display:flex; gap:10px; align-items:flex-start; font-size:14px; color:#c9d2de; margin-bottom:12px; }
+  .quote-info li::before{ content:"—"; color:var(--brass-2); flex:none; }
+  .contact-line{ margin-top:30px; padding-top:20px; border-top:1px solid rgba(241,237,228,0.15); font-size:13.5px; color:#93a2b6; }
+  .contact-line .mono{ color:var(--brass-2); }
+
+  .quote-form{ background:#fff; padding:44px 38px; }
+  .form-row{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media (max-width:520px){ .form-row{ grid-template-columns:1fr; } }
+  .field{ margin-bottom:18px; }
+  .field label{
+    display:block; font-size:12px; font-weight:600; letter-spacing:0.07em; text-transform:uppercase;
+    color:var(--steel); margin-bottom:7px;
+  }
+  .field input, .field select, .field textarea{
+    width:100%; border:1.5px solid #d6d1c4; border-radius:var(--radius); padding:11px 12px;
+    font-family:'Source Sans 3',sans-serif; font-size:14.5px; color:var(--ink); background:#fcfbf8;
+    transition:border-color .12s ease;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{
+    outline:none; border-color:var(--steel-2); box-shadow:0 0 0 3px rgba(31,58,95,0.12);
+  }
+  .field textarea{ resize:vertical; min-height:80px; }
+  .field .hint{ font-size:12px; color:#8a90a0; margin-top:5px; }
+
+  fieldset.services-fs{ border:1.5px solid #d6d1c4; border-radius:var(--radius); padding:16px; margin:0 0 18px; }
+  fieldset.services-fs legend{ font-size:12px; font-weight:600; letter-spacing:0.07em; text-transform:uppercase; color:var(--steel); padding:0 6px; }
+  .svc-check-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:6px; }
+  @media (max-width:520px){ .svc-check-grid{ grid-template-columns:1fr; } }
+  .svc-check{ display:flex; align-items:center; gap:10px; }
+  .svc-check input[type=checkbox]{ width:17px; height:17px; accent-color:var(--steel-2); flex:none; }
+  .svc-check .qty{ width:64px; margin-left:auto; padding:6px 8px; font-size:13.5px; }
+  .svc-check label{ font-size:14px; color:var(--ink); text-transform:none; font-weight:500; letter-spacing:0; margin:0; }
+  .svc-check.disabled label, .svc-check.disabled .qty{ opacity:0.4; }
+
+  .submit-btn{
+    width:100%; background:var(--steel); color:#fff; border:none; padding:16px; border-radius:var(--radius);
+    font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:0.06em; font-size:15px;
+    font-weight:600; cursor:pointer; transition:background .15s ease;
+  }
+  .submit-btn:hover{ background:var(--steel-2); }
+  .submit-btn:disabled{ opacity:0.6; cursor:progress; }
+
+  .form-error{ color:var(--err); font-size:13.5px; margin-top:12px; display:none; }
+
+  /* ---------- STAMP / CONFIRMATION ---------- */
+  .stamp-overlay{
+    position:fixed; inset:0; background:rgba(10,15,25,0.72);
+    display:none; align-items:center; justify-content:center; z-index:200; padding:24px;
+  }
+  .stamp-overlay.show{ display:flex; }
+  .stamp-card{
+    background:var(--paper); border-radius:var(--radius); max-width:420px; width:100%;
+    padding:44px 34px 38px; text-align:center; position:relative;
+    box-shadow:0 30px 80px rgba(0,0,0,0.5);
+  }
+  .stamp-ring{
+    width:120px; height:120px; margin:0 auto 22px; position:relative;
+    border:4px solid var(--brass); border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    transform:scale(0.4) rotate(-18deg); opacity:0;
+    animation: stampIn .5s cubic-bezier(.2,1.5,.4,1) forwards .05s;
+  }
+  @keyframes stampIn{ to{ transform:scale(1) rotate(-8deg); opacity:1; } }
+  .stamp-ring::before{
+    content:""; position:absolute; inset:6px; border:1.5px solid var(--brass); border-radius:50%;
+  }
+  .stamp-ring svg{ width:52px; height:52px; }
+  .stamp-card h3{ font-size:22px; color:var(--navy); }
+  .stamp-card .ref{ margin-top:8px; color:var(--brass); font-size:13.5px; }
+  .stamp-card p{ color:#5b6270; font-size:14.5px; line-height:1.6; margin-top:16px; }
+  .stamp-close{
+    margin-top:24px; background:var(--navy); color:var(--paper); border:none; padding:12px 22px;
+    border-radius:var(--radius); font-family:'Oswald',sans-serif; text-transform:uppercase;
+    letter-spacing:0.05em; font-size:13.5px; cursor:pointer;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{ background:var(--navy); color:#8b96a8; padding:34px 0; font-size:13px; }
+  footer .wrap{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
+  footer .mono{ color:var(--brass-2); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand">
+      <svg class="shield-mark" viewBox="0 0 30 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15 0L29 5V16C29 25 23 31 15 34C7 31 1 25 1 16V5L15 0Z" fill="#c9a227"/>
+        <path d="M15 3L26 7V16C26 23.5 21 28.5 15 31C9 28.5 4 23.5 4 16V7L15 3Z" fill="#0e1a2b"/>
+      </svg>
+      <div class="brand-text">
+        <div class="top">GREEK SHIELD</div>
+        <div class="bottom">EVENT SERVICES</div>
+      </div>
+    </div>
+    <div class="navlinks">
+      <a href="#services">Services</a>
+      <a href="#how">How it works</a>
+      <a href="#quote" class="nav-cta">Get a quote</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Armed &amp; Unarmed Security · Bodyguards · Event Staffing</div>
+      <h1>Whatever the job,<br>properly <span>staffed</span> and <span>secured</span>.</h1>
+      <p class="lede">Fraternity parties, weddings, retail floors, properties, or a client who needs a bodyguard and a driver — tell us what you need and we'll put together your staffing quote.</p>
+      <div class="hero-actions">
+        <a href="#quote" class="btn btn-primary">Request a quote</a>
+        <a href="#services" class="btn btn-ghost">See what we cover</a>
+      </div>
+      <div class="hero-badge-served"><span class="mono">01</span> Trusted by Greek life chapters &amp; event organizers around Atlanta</div>
+    </div>
+    <div class="emblem-wrap">
+      <svg class="emblem" viewBox="0 0 220 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M110 0L215 38V120C215 185 172 225 110 250C48 225 5 185 5 120V38L110 0Z" fill="#152a44"/>
+        <path d="M110 14L201 46V120C201 178 164 213 110 235C56 213 19 178 19 120V46L110 14Z" fill="#0a1220" stroke="#c9a227" stroke-width="2"/>
+        <path d="M110 40L60 100V150L110 205L160 150V100L110 40Z" fill="none" stroke="#c9a227" stroke-width="2.5"/>
+        <circle cx="110" cy="122" r="18" fill="none" stroke="#e0bc4a" stroke-width="2.5"/>
+        <path d="M102 122L108 128L120 114" stroke="#e0bc4a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<section class="services" id="services">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">What we staff</div>
+      <h2>Staffing built around whatever the job needs</h2>
+      <p>We're a staffing company first — security is where we're strongest, but it's not the ceiling. These are the requests we cover most often. If yours doesn't fit neatly into one of these, tell us about it on the form anyway.</p>
+    </div>
+    <div class="svc-grid">
+      <div class="svc-card brass">
+        <div class="svc-tag">POST 01</div>
+        <h3>Fraternity Parties</h3>
+        <p>Door guards, bartenders, and barricades bundled for chapter events — sized to your guest list and venue.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-tag">POST 02</div>
+        <h3>Unarmed Security</h3>
+        <p>Uniformed guards for door coverage, capacity control, and general event or venue safety.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-tag">POST 03</div>
+        <h3>Armed Security</h3>
+        <p>Licensed armed officers for higher-risk events, properties, or clients who need that level of coverage.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-tag">POST 04</div>
+        <h3>Celebrity Bodyguard &amp; Transportation</h3>
+        <p>Personal protection and secure driving for high-profile clients, on their schedule and their terms.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-tag">POST 05</div>
+        <h3>Property Security</h3>
+        <p>Ongoing coverage for buildings, construction sites, and warehouses — patrols, access control, overnight watch.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-tag">POST 06</div>
+        <h3>Retail Security</h3>
+        <p>Loss-prevention and floor security staff who know how to watch a store without scaring off customers.</p>
+      </div>
+    </div>
+    <div class="extras-strip">
+      <strong>Also available:</strong>
+      <span>Bartenders, barricades, tables &amp; chairs, and staffing for weddings, concerts, or anything else you throw at us — just add a note on the request form.</span>
+    </div>
+  </div>
+</section>
+
+<section class="how" id="how">
+  <div class="wrap how-grid">
+    <div class="how-step">
+      <div class="num mono">01</div>
+      <h3>Tell us the details</h3>
+      <p>Fill out the form below with your date, location, and what you need staffed.</p>
+    </div>
+    <div class="how-step">
+      <div class="num mono">02</div>
+      <h3>We review it</h3>
+      <p>Your request comes straight to us. We check availability and work out pricing for your date.</p>
+    </div>
+    <div class="how-step">
+      <div class="num mono">03</div>
+      <h3>You get a quote</h3>
+      <p>We follow up by email or phone with your quote and next steps to lock in your date.</p>
+    </div>
+  </div>
+</section>
+
+<section class="quote" id="quote">
+  <div class="wrap">
+    <div class="quote-shell">
+      <div class="quote-info">
+        <div class="eyebrow" style="color:#e0bc4a;">Request a quote</div>
+        <h2>Get your event staffed</h2>
+        <p>This isn't an instant price — it's a heads-up to our team with everything we need to put a real quote together fast.</p>
+        <ul>
+          <li>Tell us your date, time, and location</li>
+          <li>Check off what you need — security, bodyguards, bartenders, barricades, or something else</li>
+          <li>We'll follow up with pricing and availability</li>
+        </ul>
+        <div class="contact-line">
+          Prefer to talk it through first?<br>
+          <span class="mono">info@greekshieldevents.com</span>
+        </div>
+      </div>
+
+      <form class="quote-form" id="quoteForm">
+        <div class="form-row">
+          <div class="field">
+            <label for="name">Full name</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="field">
+            <label for="org">Organization / chapter</label>
+            <input type="text" id="org" name="org" placeholder="e.g. a GT chapter, a company, N/A">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          <div class="field">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" name="phone" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="eventType">Event type</label>
+            <select id="eventType" name="eventType">
+              <option>Fraternity / sorority party</option>
+              <option>Wedding</option>
+              <option>Private party</option>
+              <option>Concert</option>
+              <option>Personal protection / bodyguard</option>
+              <option>Property security (ongoing)</option>
+              <option>Retail security (ongoing)</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="guestCount">Expected guests</label>
+            <input type="number" id="guestCount" name="guestCount" min="1" placeholder="e.g. 150">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="eventDate">Event date</label>
+            <input type="date" id="eventDate" name="eventDate" required>
+          </div>
+          <div class="field">
+            <label for="startTime">Start time</label>
+            <input type="time" id="startTime" name="startTime" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="endTime">End time</label>
+            <input type="time" id="endTime" name="endTime">
+          </div>
+          <div class="field">
+            <label for="location">Venue / address</label>
+            <input type="text" id="location" name="location" required>
+          </div>
+        </div>
+
+        <fieldset class="services-fs">
+          <legend>What do you need staffed?</legend>
+          <div class="svc-check-grid">
+            <div class="svc-check">
+              <input type="checkbox" id="svc-unarmed" name="svc-unarmed" checked>
+              <label for="svc-unarmed">Unarmed security</label>
+              <input type="number" class="qty" min="1" name="unarmedQty" placeholder="#" value="2">
+            </div>
+            <div class="svc-check">
+              <input type="checkbox" id="svc-armed" name="svc-armed">
+              <label for="svc-armed">Armed security</label>
+              <input type="number" class="qty" min="1" name="armedQty" placeholder="#" disabled>
+            </div>
+            <div class="svc-check">
+              <input type="checkbox" id="svc-bodyguard" name="svc-bodyguard">
+              <label for="svc-bodyguard">Bodyguard &amp; transportation</label>
+              <input type="number" class="qty" min="1" name="bodyguardQty" placeholder="#" disabled>
+            </div>
+            <div class="svc-check">
+              <input type="checkbox" id="svc-property" name="svc-property">
+              <label for="svc-property">Property security</label>
+              <input type="text" class="qty" style="width:90px" name="propertyQty" placeholder="hrs/wk" disabled>
+            </div>
+            <div class="svc-check">
+              <input type="checkbox" id="svc-retail" name="svc-retail">
+              <label for="svc-retail">Retail security</label>
+              <input type="number" class="qty" min="1" name="retailQty" placeholder="#" disabled>
+            </div>
+            <div class="svc-check">
+              <input type="checkbox" id="svc-bartenders" name="svc-bartenders">
+              <label for="svc-bartenders">Bartenders</label>
+              <input type="number" class="qty" min="1" name="bartendersQty" placeholder="#" disabled>
+            </div>
+            <div class="svc-check">
+              <input type="checkbox" id="svc-barricades" name="svc-barricades">
+              <label for="svc-barricades">Barricades</label>
+              <input type="number" class="qty" min="1" name="barricadesQty" placeholder="ft" disabled>
+            </div>
+            <div class="svc-check">
+              <input type="checkbox" id="svc-extras" name="svc-extras">
+              <label for="svc-extras">Something else</label>
+              <input type="text" class="qty" style="width:110px" name="extrasQty" placeholder="describe" disabled>
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="field">
+          <label for="notes">Anything else we should know?</label>
+          <textarea id="notes" name="notes" placeholder="Layout details, alcohol service, special requests, etc."></textarea>
+          <div class="hint">Optional — the more detail, the faster we can quote it.</div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">Submit request</button>
+        <div class="form-error" id="formError">Something went wrong sending your request — please email us directly at info@greekshieldevents.com.</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>© <span id="year"></span> Greek Shield Event Services</div>
+    <div class="mono">greekshieldevents.com</div>
+  </div>
+</footer>
+
+<div class="stamp-overlay" id="stampOverlay">
+  <div class="stamp-card">
+    <div class="stamp-ring">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M4 12L10 18L20 6" stroke="#e0bc4a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h3>Request received</h3>
+    <div class="ref mono" id="refNumber"></div>
+    <p>We've got your event details. Expect a quote by email or phone shortly.</p>
+    <button class="stamp-close" id="stampClose">Done</button>
+  </div>
+</div>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Toggle quantity fields when a service checkbox is checked
+  document.querySelectorAll('.svc-check').forEach(function(row){
+    var checkbox = row.querySelector('input[type=checkbox]');
+    var qty = row.querySelector('.qty');
+    checkbox.addEventListener('change', function(){
+      qty.disabled = !checkbox.checked;
+      if(checkbox.checked && !qty.value && qty.type === 'number'){ qty.value = 1; }
+    });
+  });
+
+  // ---- FORMSPREE CONFIG ----
+  // Replace YOUR_FORM_ID with the ID Formspree gives you at formspree.io
+  var FORMSPREE_ENDPOINT = "https://formspree.io/f/xdeoonyl";
+
+  var form = document.getElementById('quoteForm');
+  var submitBtn = document.getElementById('submitBtn');
+  var errorBox = document.getElementById('formError');
+  var overlay = document.getElementById('stampOverlay');
+  var refNumber = document.getElementById('refNumber');
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    errorBox.style.display = 'none';
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+
+    var ref = 'GS-' + Date.now().toString().slice(-6);
+    var formData = new FormData(form);
+    formData.append('reference', ref);
+
+    fetch(FORMSPREE_ENDPOINT, {
+      method: 'POST',
+      body: formData,
+      headers: { 'Accept': 'application/json' }
+    }).then(function(res){
+      if(res.ok){
+        refNumber.textContent = 'Reference ' + ref;
+        overlay.classList.add('show');
+        form.reset();
+        document.querySelectorAll('.svc-check .qty').forEach(function(q){ q.disabled = true; });
+        document.getElementById('svc-unarmed').checked = true;
+        document.querySelector('input[name=unarmedQty]').disabled = false;
+        document.querySelector('input[name=unarmedQty]').value = 2;
+      } else {
+        throw new Error('Bad response');
+      }
+    }).catch(function(){
+      errorBox.style.display = 'block';
+    }).finally(function(){
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit request';
+    });
+  });
+
+  document.getElementById('stampClose').addEventListener('click', function(){
+    overlay.classList.remove('show');
+  });
+</script>
+
+</body>
+</html>
